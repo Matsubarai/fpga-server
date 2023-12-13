@@ -7,7 +7,7 @@ ARG XILINX_VERSION=2022.2
 VOLUME /data
 
 RUN wget -qO- https://www.xilinx.com/bin/public/openDownload?filename=xilinx-u280-gen3x16-xdma_2022.2_2022_1015_0317-all.deb.tar.gz > deploy.tar.gz && \
-    tar -xzf deploy.tar.gz -C /opt/xilinx/shell
+    tar -xzf deploy.tar.gz -C /opt/xilinx/shell && rm deploy.tar.gz
 
 RUN apt-get update && \
     apt-get install /opt/xilinx/shell/xilinx*u280*.deb && \
