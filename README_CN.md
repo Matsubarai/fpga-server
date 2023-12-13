@@ -5,7 +5,7 @@
 By Qianyu Cheng (qycheng@mail.ustc.edu.cn) 
 
 Date: 2023/12/12
-## Overview
+## Feature Overview
 U280服务器维护已基本完成，提供特性如下：
 - 数据安全
   - 用户环境禁用 `sudo` 权限 (除 `ubuntu`), `XRT/setup.sh` 环境配置
