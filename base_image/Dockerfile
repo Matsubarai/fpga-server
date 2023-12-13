@@ -6,7 +6,7 @@ ARG XILINX_VERSION=2022.2
 
 VOLUME /data
 
-COPY ./ubuntu_pkgs/ /opt/xilinx/shell
+RUN wget -qO- https://www.xilinx.com/bin/public/openDownload?filename=xilinx-u280-gen3x16-xdma_2022.2_2022_1015_0317-all.deb.tar.gz | tar xz --strip 1 -C /opt/xilinx/shell
 
 RUN sed -i 's@//.*archive.ubuntu.com@//mirrors.ustc.edu.cn@g' /etc/apt/sources.list && \
     apt-get update && \
