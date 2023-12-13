@@ -15,13 +15,13 @@ Date: 2023/12/12
     env_dealloc # deallocate
     ```
   - Reserve data in `/data` directory of the container only (i.e. `/home/$USER` directory of the host)
-  - user creation script (`sudo` permission needed)
+  - User creation script (`sudo` permission needed)
     ```bash
     /home/ubuntu/new_user_init.sh <username>
     ```
 - Resource Management
-  - allocate FPGA cards (`-d DeviceID,...`)
-  - shared/exclusive allocation (with `-e` or without `-e`)
+  - Allocate FPGA cards (`-d DeviceID,...`)
+  - Shared/exclusive allocation (with `-e` or without `-e`)
 - Service
   - `Portainer` (Web-based container management) support (`https://<IP>:2000`)
   - Multi-version environment switched by `-i xilinx-u280:{2020.2|2021.2|2022.2|2023.2}`
