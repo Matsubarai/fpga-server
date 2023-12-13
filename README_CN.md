@@ -11,9 +11,9 @@ U280服务器维护已基本完成，提供特性如下：
   - 用户环境禁用 `sudo` 权限 (除 `ubuntu`), `XRT/setup.sh` 环境配置
   - 仅限以容器模式分配，进入，释放完整开发环境 (基于提供的脚本)
     ```bash
-    env_alloc [-d <DeviceID[,...]>] [-e] [-p <APP=jupyter|vnc>] [-i <IMAGE_NAME>] #分配
-    env_exec #进入
-    env_dealloc #释放
+    env_alloc [-d <DeviceID[,...]>] [-e] [-p <APP=jupyter|vnc>] [-i <IMAGE_NAME>] # 分配
+    env_exec # 进入
+    env_dealloc # 释放
     ```
   - 数据完全隔离, 仅限在容器环境 `/data` (用户环境 `/home/$USER`) 目录内读写、保留数据
   - 使用脚本创建用户，避免错误授权 (需要 `sudo` 权限)
