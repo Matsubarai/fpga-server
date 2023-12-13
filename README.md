@@ -31,6 +31,6 @@ Date: 2023/12/12
   - Automatic port forwarding in `<IP>:2001-2010`
 - Known Issue
   - Unstable file ownership in `/home/$USER` directory (was set to `root`)
-    - Mitigation: change ownership in the container environment with `chown <HOST_UID>`
+    - Mitigation: change file ownership inside the container environment with `chown <HOST_UID>`
 
 ![](image.png)
