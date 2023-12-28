@@ -1,5 +1,7 @@
 # 一些傻瓜教程
-## Step 1: 登入
+## Step 0: 登入VPN
+为了保证安全性，需要通过VPN接入服务器所在网段。请联系管理员申请VPN账号与服务器账号。
+## Step 1: 登入服务器
 我们建议使用SSH协议登入服务器。一般而言，VSCode/MobaXterm/Windows终端都是优秀的登入工具。以Windows终端为例。
 启动Windows终端，输入以下指令，回车执行：
 ```powershell
@@ -29,7 +31,7 @@ env_alloc -p vnc
 ```bash
 env_alloc -d <ID> [OTHER OPTION]
 ```
-可以通过 `xbutil examine` 查询分配板卡的情况。
+可以通过 `xbutil examine` 查询所附带板卡的情况。
 #### Step 2.5: 我已经分配了环境，但是由于我自己主动退出、SSH超时断连、实验室断网、断电等原因退出了环境。我还想继续使用之前分配的环境！
 执行 `env_exec` 可以返回之前已分配的环境。
 ## Step 3: 释放开发环境
@@ -42,7 +44,7 @@ env_alloc -d <ID> [OTHER OPTION]
 
 你需要先执行 `exit` 返回主机环境，之后执行 `env_dealloc` 指令释放。
 ## Step 4: 自定义环境
-默认环境已经提供了常用软件包，你也可以临时安装其他软件包。但是，这些执行结果都会随着环境释放而消失。
+默认环境提供了Vitis 2022.2 & XRT 3.14.354开发环境，且已经提供了相关软件包支持，你也可以临时安装其他软件包。但是，这些执行结果都会随着环境释放而消失。
 
 如果你需要长期使用自定义的环境，可以根据**构建脚本[模板](./Dockerfile)**，编写你所需软件包的安装流程，通过Pull requests提交到该仓库。
 
@@ -50,3 +52,4 @@ env_alloc -d <ID> [OTHER OPTION]
 ```bash
 env_alloc -i <IMAGE NAME> [OTHER OPTION]
 ```
+该指令同样支持切换到其他版本的默认开发环境，镜像名为xilinx-u280:{2020.2|2021.2|2022.2|2023.2}。（**未测试，可能会导致问题，不推荐！！！**）
