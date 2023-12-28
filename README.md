@@ -4,6 +4,8 @@ English | [Chinese](./README_CN.md)
 
 By Qianyu Cheng (qycheng@mail.ustc.edu.cn) 
 
+**Note: Tutorial in Chinese is [here](./for_newbie.md)!!!**
+
 Date: 2023/12/12
 ## Feature Overview
 - Security
