@@ -1,4 +1,4 @@
-# Guide for Lab502 Server with Xilinx Cards v0.2
+# Guide for Lab502 Server with Xilinx Cards v0.3
 
 English | [Chinese](./README_CN.md)
 
@@ -6,7 +6,7 @@ By Qianyu Cheng (qycheng@mail.ustc.edu.cn)
 
 **Note: Tutorial in Chinese is [here](./for_newbie.md)!!!**
 
-Date: 2023/12/12
+Date: 2023/12/29
 ## Feature Overview
 - Security
   - Disable `sudo` for all users (except `ubuntu`) and `XRT/setup.sh` configuration
@@ -24,6 +24,7 @@ Date: 2023/12/12
 - Resource Management
   - Allocate FPGA cards (`-d DeviceID,...`)
   - Shared/exclusive allocation (with `-e` or without `-e`)
+  - Release FPGA cards with timers (after 3 hours)
 - Service
   - `Portainer` (Web-based container management) support (`https://<IP>:2000`)
   - Multi-version environment switched by `-i xilinx-u280:{2020.2|2021.2|2022.2|2023.2}`
