@@ -8,6 +8,7 @@
 **Note: 请联系管理员申请 VPN 账号与服务器账号。**
 ## Step 1: 登入服务器
 我们建议使用 SSH 协议登入服务器。一般而言, VSCode/MobaXterm/Windows 终端都是优秀的登入工具。以 Windows 终端为例。
+
 启动 Windows 终端，输入以下指令，回车执行：
 ```powershell
 ssh <USERNAME>@<SERVER IP>
