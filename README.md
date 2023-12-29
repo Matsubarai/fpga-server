@@ -36,4 +36,4 @@ Date: 2023/12/29
   - Unstable file ownership in `/home/$USER` directory (was set to `root`)
     - Mitigation: change file ownership inside the container environment with `chown <HOST_UID>`
 
-![](image.png)
+![](./images/demo.png)
