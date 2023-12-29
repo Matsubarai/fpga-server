@@ -56,7 +56,7 @@ do
 	esac
 done
 echo "custom mount point: $MNT"
-FLAGS="--label owner=$USER --name $USER-env --runtime=xilinx -v /usr/local/MATLAB:/usr/local/MATLAB -v $HOME:/data -v /usr/local/etc:/usr/local/etc -v /tools:/tools:ro -e XILINX_VISIBLE_DEVICES=$DEVICE -e XILINX_DEVICE_EXCLUSIVE=$EXC -e VNC_ENABLE=$VNC_ENABLE -e JUPYTER_ENABLE=$JUPYTER_ENABLE $MNT"
+FLAGS="--label owner=$USER --name $USER-env --runtime=xilinx -v /usr/local/MATLAB:/usr/local/MATLAB -v $HOME:/data -v /usr/local/etc:/usr/local/etc -v /tools:/tools:ro -e XILINX_VISIBLE_DEVICES=$DEVICE -e XILINX_DEVICE_EXCLUSIVE=$EXC -e VNC_ENABLE=$VNC_ENABLE -e JUPYTER_ENABLE=$JUPYTER_ENABLE -e USER=$USER $MNT"
 
 docker inspect $USER-env > /dev/null 2>&1
 if [ $? -eq 0 ]
@@ -75,7 +75,7 @@ then
 
 	if [ $PORT ]
 	then
-		echo "Publish $APP port $EXPOSE_PORT/tcp -> http://192.168.20.40:$PORT"
+		echo "Publish $APP port $EXPOSE_PORT/tcp -> localhost:$PORT"
 		docker run -d -p $PORT:$EXPOSE_PORT -e PORT=$PORT $FLAGS $IMG
 	else
 		echo "No valid port for publishing, use a random port"
@@ -85,4 +85,10 @@ else
 	echo "In command-line mode"
 	docker run -d $FLAGS $IMG init
 fi
+
+if [ $DEVICE ]
+then
+	at -f /usr/local/bin/env_dealloc now +2 hours 2>&1 | grep -o '[0-9]\+' | head -1 > $HOME/.timer_id
+fi
+
 docker exec -it $USER-env /bin/bash
