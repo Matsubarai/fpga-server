@@ -1,10 +1,10 @@
-# Guide for Lab502 Server with Xilinx Cards v0.2
+# Guide for Lab502 Server with Xilinx Cards v0.3
 
 [English](./README.md) | Chinese
 
 By Qianyu Cheng (qycheng@mail.ustc.edu.cn) 
 
-Date: 2023/12/12
+Date: 2023/12/29
 ## Feature Overview
 U280服务器维护已基本完成，提供特性如下：
 - 数据安全
@@ -36,4 +36,4 @@ U280服务器维护已基本完成，提供特性如下：
   - 在容器 `/home/$USER` 目录内读写文件，返回用户环境后可能引发权限问题 (文件所有权被设为root)
     - 缓解措施: 提前记下用户 `$UID`, 在容器内使用`chown <HOST_UID>`修改所有权
 
-![](image.png)
+![](./images/demo.png)
