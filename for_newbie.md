@@ -21,7 +21,7 @@ ssh <USERNAME>@<SERVER IP>
 ```bash
 env_alloc
 ```
-### Step 2.2: 写不惯 OpenCL 语法的主机端程序，我要用 PYNQ ，我要用 Jupyter 交互界面！
+### Step 2.2: 写不惯 OpenCL 语法的主机端程序，我要用 [PYNQ](http://www.pynq.io/) ，我要用 [Jupyter](https://jupyter.org/) 交互界面！
 ```bash
 env_alloc -p jupyter
 ```
@@ -30,7 +30,7 @@ env_alloc -p jupyter
 ```bash
 env_alloc -p vnc
 ```
-你可以点击命令行输出的链接访问 VNC 桌面服务。在非必要的情况下使用该功能可能会影响性能。
+你可以点击命令行输出的链接访问 [noVNC](https://novnc.com/info.html) 桌面服务。在非必要的情况下使用该功能可能会影响性能。
 
 ![GUI](./images/gui.gif)
 ### Step 2.4: 我写完了设计，完成了仿真，要上板进行测试！
