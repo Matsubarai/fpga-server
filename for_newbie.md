@@ -10,7 +10,7 @@ ssh <USERNAME>@<SERVER IP>
 ```
 接下来输入密码。密码不会在屏幕上显示，输入完毕后回车。
 
-![logging](./image/logging.gif)
+![logging](./images/logging.gif)
 ## Step 2: 分配开发环境
 登入后无法直接使用完整的开发环境，你需要分配一个开发环境。
 
@@ -29,7 +29,8 @@ env_alloc -p jupyter
 env_alloc -p vnc
 ```
 你可以点击命令行输出的链接进行访问。在非必要的情况下使用该功能可能会影响性能。
-![GUI](./gui.gif)
+
+![GUI](./images/gui.gif)
 ### Step 2.4: 我写完了设计，完成了仿真，要上板进行测试！
 **Note: 使用板卡前请联系管理员，确认板卡使用情况！！！**
 
