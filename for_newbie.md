@@ -1,6 +1,8 @@
 # 一些傻瓜教程
 对 tutorial 有疑问，欢迎通过 issue 或 pull request 提出。
 
+如需了解 FPGA 开发工具 Vitis 的工作流程，请参考[Vitis工作流教程](https://github.com/Reconfigurable-Computing/Vitis_workflow)
+
 ![Workflow](./images/workflow.png)
 ## Step 0: 登入 VPN 服务
 为了保证安全性，需要通过 VPN 接入服务器所在网段。在使用服务器前，请下载 [EasyConnect](https://support.sangfor.com.cn/productSoftware/list?product_id=20&category_id=56) 并登入 VPN 服务。
