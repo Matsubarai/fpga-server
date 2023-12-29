@@ -1,7 +1,7 @@
 # 一些傻瓜教程
 对 tutorial 有疑问，欢迎通过 issue 或 pull request 提出。
 
-如需了解 FPGA 开发工具 Vitis 的工作流程，请参考[Vitis工作流教程](https://github.com/Reconfigurable-Computing/Vitis_workflow)
+如需了解 FPGA 开发工具 Vitis 的工作流程，请参考 [Vitis 工作流教程](https://github.com/Reconfigurable-Computing/Vitis_workflow)中针对 U50 板卡的章节。
 
 ![Workflow](./images/workflow.png)
 ## Step 0: 登入 VPN 服务
