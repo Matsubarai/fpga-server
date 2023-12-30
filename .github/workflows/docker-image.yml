@@ -21,22 +21,22 @@ jobs:
     name: setup
     runs-on: ubuntu-latest
     outputs:
-      custom-envs: ${{ steps.setup.outputs.custom-envs }}
+      custom_envs: ${{ steps.setup.outputs.custom_envs }}
     steps:
       - name: setup
         id: setup
         run: |
           for file in $(find ./Dockerfile.* -type f); do
-            if [ ${custom-envs} ]
+            if [ ${custom_envs} ]
             then
-              custom-envs="${custom-envs},"${file:11}""
+              custom_envs="${custom_envs},"${file:13}""
             else
-              custom-envs="["${file:11}""
+              custom_envs="["${file:13}""
             fi
           done
-          custom-envs="${custom-envs}]"
-          list=$(echo ${custom-envs} | jq -c)
-          echo "::set-output name=custom-envs::${list}"
+          custom_envs="${custom_envs}]"
+          list=$(echo ${custom_envs} | jq -c)
+          echo "::set-output name=custom_envs::${list}"
   
   build-and-push-image:
     runs-on: ubuntu-latest
@@ -46,7 +46,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        custom-envs: ${{ fromJson(needs.setup.outputs.custom-envs) }}
+        custom_envs: ${{ fromJson(needs.setup.outputs.custom_envs) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -72,11 +72,11 @@ jobs:
         id: meta_custom
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.custom-envs }}
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.custom_envs }}
       - name: Build and push Docker image - custom image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
-          file: Dockerfile.${{ matrix.custom-envs }}
+          file: Dockerfile.${{ matrix.custom_envs }}
           push: true
           tags: ${{ steps.meta_custom.outputs.tags }}
           labels: ${{ steps.meta_custom.outputs.labels }}
