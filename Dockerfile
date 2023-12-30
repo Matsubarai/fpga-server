@@ -1,4 +1,4 @@
-FROM xilinx-u280:2022.2
+FROM ghcr.io/matsubarai/lab502-server-guide:main
 WORKDIR /
 RUN git clone https://github.com/rogersce/cnpy.git && \
     apt-get update && apt-get install -y cmake && apt-get clean && \
