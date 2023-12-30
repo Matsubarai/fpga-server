@@ -28,12 +28,13 @@ jobs:
       - name: setup
         id: setup
         run: |
-          for file in $(find . -type f -name "Dockerfile.*"); do
+          for file in $(find . -type f -name "Dockerfile.*")
+          do
             if [ ${custom_envs} ]
             then
-              custom_envs="${custom_envs},"${file:13}""
+              custom_envs="${custom_envs},\"${file:13}\""
             else
-              custom_envs="["${file:13}""
+              custom_envs="[\"${file:13}\""
             fi
           done
           custom_envs="${custom_envs}]"
