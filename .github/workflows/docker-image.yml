@@ -3,19 +3,53 @@ name: Create and publish a Docker image
 on:
   push:
     branches: [ "main" ]
+    paths: 
+      - "Dockerfile**"
+      - "base_image/**"
   pull_request:
     branches: [ "main" ]
+    paths: 
+      - "Dockerfile**"
+      - "base_image/**"
 
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+  setup:
+    name: setup
+    runs-on: ubuntu-latest
+    outputs:
+      custom_envs: ${{ steps.setup.outputs.custom_envs }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: setup
+        id: setup
+        run: |
+          for file in $(find . -type f -name "Dockerfile.*")
+          do
+            if [ ${custom_envs} ]
+            then
+              custom_envs="${custom_envs},\"${file:13}\""
+            else
+              custom_envs="[\"${file:13}\""
+            fi
+          done
+          custom_envs="${custom_envs}]"
+          list=$(echo ${custom_envs} | jq -c)
+          echo "::set-output name=custom_envs::${list}"
+  
   build-and-push-image:
     runs-on: ubuntu-latest
+    needs: setup
     permissions:
       contents: read
       packages: write
+    strategy:
+      matrix:
+        custom_envs: ${{ fromJson(needs.setup.outputs.custom_envs) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,15 +59,27 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract metadata (tags, labels) for Docker
-        id: meta
+      - name: Extract metadata (tags, labels) for Docker - base image
+        id: meta_base
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-      - name: Build and push Docker image
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/xilinx-u280
+      - name: Build and push Docker image - base image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
           context: ./base_image/
           push: true
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+          tags: ${{ steps.meta_base.outputs.tags }}
+          labels: ${{ steps.meta_base.outputs.labels }}
+      - name: Extract metadata (tags, labels) for Docker - custom image
+        id: meta_custom
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/${{ matrix.custom_envs }}
+      - name: Build and push Docker image - custom image
+        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
+        with:
+          file: Dockerfile.${{ matrix.custom_envs }}
+          push: true
+          tags: ${{ steps.meta_custom.outputs.tags }}
+          labels: ${{ steps.meta_custom.outputs.labels }}
