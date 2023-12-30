@@ -21,7 +21,7 @@ jobs:
     name: setup
     runs-on: ubuntu-latest
     outputs:
-      os: ${{ steps.setup.outputs.custom-envs }}
+      custom-envs: ${{ steps.setup.outputs.custom-envs }}
     steps:
       - name: setup
         id: setup
@@ -45,7 +45,7 @@ jobs:
       packages: write
     strategy:
       matrix:
-        custom-envs: ${{ fromJson(needs.setup.outputs.os) }}
+        custom-envs: ${{ fromJson(needs.setup.outputs.custom-envs) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
