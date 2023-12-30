@@ -27,7 +27,8 @@ jobs:
         id: setup
         run: |
           for file in $(find ./Dockerfile.* -type f); do
-            if [ ${custom-envs} ] then
+            if [ ${custom-envs} ]
+            then
               custom-envs="${custom-envs},"${file:11}""
             else
               custom-envs="["${file:11}""
