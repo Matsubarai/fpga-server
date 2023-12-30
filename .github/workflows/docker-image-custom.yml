@@ -37,7 +37,7 @@ jobs:
           done
           custom_envs="${custom_envs}]"
           list=$(echo ${custom_envs} | jq -c)
-          echo "::set-output name=custom_envs::${list}"
+          echo "custom_envs=${list}" >> $GITHUB_OUTPUT
 
   build-and-push-custom-image:
     runs-on: ubuntu-latest
