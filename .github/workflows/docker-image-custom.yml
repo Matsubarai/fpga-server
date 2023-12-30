@@ -1,6 +1,11 @@
 name: Create and publish a Docker image (Custom Images)
 
 on:
+  workflow_run:
+    workflows: ["Create and publish a Docker image (Base Image)"]
+    branches: [ "main" ]
+    types: 
+      - completed
   push:
     branches: [ "main" ]
     paths: 
