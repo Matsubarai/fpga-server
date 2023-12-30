@@ -23,6 +23,8 @@ jobs:
     outputs:
       custom_envs: ${{ steps.setup.outputs.custom_envs }}
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: setup
         id: setup
         run: |
