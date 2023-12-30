@@ -4,13 +4,11 @@ on:
   push:
     branches: [ "main" ]
     paths: 
-      - "Dockerfile**"
-      - "base_image/**"
+      - "Dockerfile.**"
   pull_request:
     branches: [ "main" ]
     paths: 
-      - "Dockerfile**"
-      - "base_image/**"
+      - "Dockerfile.**"
 
 env:
   REGISTRY: ghcr.io
@@ -18,7 +16,7 @@ env:
 
 jobs:
   setup:
-    name: setup
+    name: Setup
     runs-on: ubuntu-latest
     outputs:
       custom_envs: ${{ steps.setup.outputs.custom_envs }}
@@ -40,8 +38,8 @@ jobs:
           custom_envs="${custom_envs}]"
           list=$(echo ${custom_envs} | jq -c)
           echo "::set-output name=custom_envs::${list}"
-  
-  build-and-push-image:
+
+  build-and-push-custom-image:
     runs-on: ubuntu-latest
     needs: setup
     permissions:
@@ -59,18 +57,6 @@ jobs:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract metadata (tags, labels) for Docker - base image
-        id: meta_base
-        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
-        with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/xilinx-u280
-      - name: Build and push Docker image - base image
-        uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
-        with:
-          context: ./base_image/
-          push: true
-          tags: ${{ steps.meta_base.outputs.tags }}
-          labels: ${{ steps.meta_base.outputs.labels }}
       - name: Extract metadata (tags, labels) for Docker - custom image
         id: meta_custom
         uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
