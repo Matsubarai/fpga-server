@@ -4,11 +4,11 @@ on:
   push:
     branches: [ "main" ]
     paths: 
-      - "./base_image/**"
+      - "base_image/**"
   pull_request:
     branches: [ "main" ]
     paths: 
-      - "./base_image/**"
+      - "base_image/**"
 
 env:
   REGISTRY: ghcr.io
