@@ -30,10 +30,11 @@ fi
 
 if [ $1 ];
 then
-	exec "$@"
-else
-	wait $PID_SUB
+	$@ 2>&1 &
+	PID_SUB=$!
 fi
+
+wait $PID_SUB
 
 if [ $PORT ];
 then
