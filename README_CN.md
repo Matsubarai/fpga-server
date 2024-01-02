@@ -2,6 +2,8 @@
 
 [English](./README.md) | Chinese
 
+**Note: 中文教程在[此处](for_newbie.md)**
+
 By Qianyu Cheng (qycheng@mail.ustc.edu.cn) 
 
 Date: 2023/12/29
