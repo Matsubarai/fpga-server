@@ -89,6 +89,7 @@ fi
 if [ $DEVICE ]
 then
 	at -f /usr/local/bin/env_dealloc now +2 hours 2>&1 | grep -o '[0-9]\+' | head -1 > $HOME/.timer_id
+	echo "Allocated devices $DEVICE will be released after 2 hours."
 fi
 
 docker exec -it $USER-env /bin/bash
