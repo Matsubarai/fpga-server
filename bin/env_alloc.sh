@@ -14,7 +14,7 @@ do
 			EXC="false"
 			;;
                 "p")
-   			if [ $EXPOSE_PORT ]
+			if [ $EXPOSE_PORT ]
 			then
 				echo "only one APP can be exposed"
 				exit 1
