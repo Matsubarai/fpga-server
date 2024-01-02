@@ -1,11 +1,9 @@
 #!/bin/bash
-DEVICE=""
 EXC="true"
 PUB="false"
 VNC_ENABLE="false"
 JUPYTER_ENABLE="false"
 IMG="localhost:32768/xilinx-u280:latest"
-MNT=""
 while getopts ":d:p:i:v:eh" optname
 do
 	case "$optname" in
