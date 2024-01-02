@@ -1,5 +1,6 @@
 #!/bin/bash
 
+#wow!
 cleanup () {
 	kill -s SIGTERM $!
 	if [ $PORT ];
