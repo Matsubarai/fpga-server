@@ -4,6 +4,6 @@ docker rm $USER-env
 if [ -f "/usr/local/etc/timer_id.$USER" ]
 then
 	echo "deallocate env with devices..."
-	atrm `cat  /usr/local/etc/timer_id.$USER`
+	atrm `cat /usr/local/etc/timer_id.$USER`
 	echo -n "" > /usr/local/etc/timer_id.$USER
 fi
