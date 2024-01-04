@@ -92,6 +92,15 @@ else
 	docker run -d $FLAGS $IMG init
 fi
 
+if [ $? -ne 0 ]
+then
+	if [ $PORT ]
+	then
+		echo $PORT >> /usr/local/etc/port_pool
+	fi
+	exit 1
+fi
+
 if [ $DEVICE ]
 then
 	at -f /usr/local/bin/env_dealloc now +2 hours 2>&1 | grep -o '[0-9]\+' | head -1 > /usr/local/etc/timer_id.$USER
