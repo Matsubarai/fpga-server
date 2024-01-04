@@ -74,10 +74,10 @@ fi
 if [ $PUB = "true" ]
 then
 	PORT=`head -n 1 /usr/local/etc/port_pool`
-	cp /usr/local/etc/port_pool $HOME/.port_pool.temp
-	sed -i '1d' $HOME/.port_pool.temp
-	cat $HOME/.port_pool.temp > /usr/local/etc/port_pool
-	rm $HOME/.port_pool.temp
+	cp /usr/local/etc/port_pool ./.port_pool.temp
+	sed -i '1d' ./.port_pool.temp
+	cat ./.port_pool.temp > /usr/local/etc/port_pool
+	rm ./.port_pool.temp
 
 	if [ $PORT ]
 	then
