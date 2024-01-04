@@ -1,8 +1,8 @@
 #!/bin/bash
 docker stop $USER-env
 docker rm $USER-env
-if [ -f "$HOME/.timer_id" ]
+if [ -f "/usr/local/etc/timer_id.$USER" ]
 then
-	atrm `cat $HOME/.timer_id`
-	rm $HOME/.timer_id
+	atrm `cat  /usr/local/etc/timer_id.$USER`
+	echo "" > /usr/local/etc/timer_id.$USER
 fi
