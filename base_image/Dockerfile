@@ -15,7 +15,7 @@ RUN apt-get update && \
     apt-get clean && \
     locale-gen en_US.UTF-8
 
-RUN pip install jupyter pynq -i https://pypi.tuna.tsinghua.edu.cn/simple
+RUN pip install jupyter pynq
 
 RUN apt-get update && \
     apt-get install -y libxrender1 libxtst6 libxi6 libfreetype6 fontconfig git vim wget net-tools bzip2 procps apt-utils ttf-wqy-zenhei && \
