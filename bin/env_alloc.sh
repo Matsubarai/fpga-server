@@ -62,7 +62,7 @@ if [ $MNT ]
 then
 	echo "custom mount point:$MNT"
 fi
-FLAGS="--label owner=$USER --name $USER-env --runtime=xilinx -v /usr/local/MATLAB:/usr/local/MATLAB -v $HOME:/data -v /usr/local/etc:/usr/local/etc -v /tools:/tools:ro -e XILINX_VISIBLE_DEVICES=$DEVICE -e XILINX_DEVICE_EXCLUSIVE=$EXC -e VNC_ENABLE=$VNC_ENABLE -e JUPYTER_ENABLE=$JUPYTER_ENABLE -e USER=$USER $MNT"
+FLAGS="--label owner=$USER --name $USER-env --runtime=xilinx -v /usr/local/MATLAB:/usr/local/MATLAB -v /home/$USER:/data -v /usr/local/etc:/usr/local/etc -v /tools:/tools:ro -e XILINX_VISIBLE_DEVICES=$DEVICE -e XILINX_DEVICE_EXCLUSIVE=$EXC -e VNC_ENABLE=$VNC_ENABLE -e JUPYTER_ENABLE=$JUPYTER_ENABLE -e USER=$USER $MNT"
 
 docker inspect $USER-env > /dev/null 2>&1
 if [ $? -eq 0 ]
