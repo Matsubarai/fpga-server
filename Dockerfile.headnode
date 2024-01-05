@@ -1,4 +1,4 @@
 FROM ubuntu:20.04
-RUN apt-get update && apt-get install -y at build-essential pip locales git vim wget net-tools bzip2 procps apt-utils && apt-get clean && locale-gen en_US.UTF-8
+RUN apt-get update && apt-get install -y at build-essential pip locales git vim wget net-tools bzip2 procps apt-utils htop && apt-get clean && locale-gen en_US.UTF-8
 VOLUME /data
 WORKDIR /data
