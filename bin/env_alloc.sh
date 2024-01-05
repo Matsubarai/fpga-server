@@ -3,7 +3,7 @@ EXC="true"
 PUB="false"
 VNC_ENABLE="false"
 JUPYTER_ENABLE="false"
-IMG="localhost:32768/xilinx-u280:latest"
+IMG="xilinx-u280:latest"
 while getopts ":d:p:i:v:eh" optname
 do
 	case "$optname" in
@@ -35,7 +35,7 @@ do
 			fi
 			;;
 		"i")
-			IMG="localhost:32768/$OPTARG"
+			IMG="$OPTARG"
 			;;
 		"v")
 			MNT="$MNT -v $OPTARG" 
