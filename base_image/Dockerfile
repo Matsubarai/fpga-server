@@ -11,7 +11,7 @@ RUN wget -qO- https://www.xilinx.com/bin/public/openDownload?filename=xilinx-u28
 
 RUN apt-get update && \
     apt-get install /opt/xilinx/shell/xilinx*u280*.deb && \
-    apt-get install -y libtinfo5 libncursesw5 libncurses5 opencl-headers pip locales && \
+    apt-get install -y libtinfo5 libncursesw5 libncurses5 libc6-dev-i386 graphviz xvfb opencl-headers pip locales && \
     apt-get clean && \
     locale-gen en_US.UTF-8
 
