@@ -9,7 +9,7 @@
 
 **Note: 请联系管理员申请 VPN 账号与服务器账号。**
 ## Step 1: 登入服务器
-我们建议使用 SSH 协议登入服务器。一般而言, VSCode/MobaXterm/Windows 终端都是优秀的登入工具。以 Windows 终端为例。
+我们建议使用 SSH 协议登入服务器。一般而言, VSCode/MobaXterm/Windows 终端都是优秀的登入工具。建议使用 **MobaXterm** 终端，但这里以 Windows 终端为例。
 
 启动 Windows 终端，输入以下指令，回车执行：
 ```powershell
@@ -32,7 +32,7 @@ env_alloc -p jupyter
 ```
 你可以点击命令行输出的链接访问 JupyterLab 服务。
 ### Step 2.3: 我要看波形，我要看综合报告，我要用图形化界面！
-更换终端工具，使用 ```MobaXterm``` 终端登入服务器。
+更换终端工具，使用 **MobaXterm** 终端登入服务器。
 
 开发环境提供了 X11 转发功能，可以利用 MobaXterm 终端的特性启动 Vitis, Vivado IDE 窗口。
 
