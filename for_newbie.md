@@ -9,9 +9,9 @@
 
 **Note: 请联系管理员申请 VPN 账号与服务器账号。**
 ## Step 1: 登入服务器
-我们建议使用 SSH 协议登入服务器。一般而言, VSCode/MobaXterm/Windows 终端都是优秀的登入工具。建议使用 **MobaXterm** 终端，但这里以 Windows 终端为例。
+我们建议使用 SSH 协议登入服务器。一般而言, VSCode/MobaXterm/Windows 终端都是优秀的登入工具。服务器建议使用 [**MobaXterm**](https://mobaxterm.mobatek.net/download-home-edition.html) 终端。
 
-启动 Windows 终端，输入以下指令，回车执行：
+以 Windows 终端为例，启动 Windows 终端，输入以下指令，回车执行：
 ```powershell
 ssh <USERNAME>@<SERVER IP>
 ```
@@ -35,6 +35,8 @@ env_alloc -p jupyter
 更换终端工具，使用 **MobaXterm** 终端登入服务器。
 
 开发环境提供了 X11 转发功能，可以利用 MobaXterm 终端的特性启动 Vitis, Vivado IDE 窗口。
+
+![GUI](images/gui.gif)
 
 ### Step 2.4: 我写完了设计，完成了仿真，现在要上板进行测试！
 注意，上述方法所分配的开发环境均不包含板卡资源。如需分配附带板卡的环境，请执行下述指令：
