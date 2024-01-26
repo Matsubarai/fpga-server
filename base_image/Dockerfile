@@ -1,72 +1,134 @@
-ARG XILINX_VERSION=2022.2
+FROM xilinx/xilinx_runtime_base:alveo-2023.2-ubuntu-20.04
 
-FROM xilinx/xilinx_runtime_base:alveo-${XILINX_VERSION}-ubuntu-20.04
-
-ARG XILINX_VERSION=2022.2
-
-VOLUME /data
-
+##
+## install Vitis dependencies
+##
 RUN wget -qO- https://www.xilinx.com/bin/public/openDownload?filename=xilinx-u280-gen3x16-xdma_2022.2_2022_1015_0317-all.deb.tar.gz > deploy.tar.gz && \
     tar -xzf deploy.tar.gz -C /opt/xilinx/shell && rm deploy.tar.gz
-
+ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
-    apt-get install /opt/xilinx/shell/xilinx*u280*.deb && \
-    apt-get install -y libtinfo5 libncursesw5 libncurses5 opencl-headers pip locales && \
+    apt-get upgrade -y -qq && \
+    apt-get install -y -qq --no-install-recommends \
+        /opt/xilinx/shell/xilinx*u280*.deb \
+        tofrodos \
+        iproute2 \
+        gawk \
+        net-tools \
+        libtinfo5 \
+        libncurses5-dev \
+        libncursesw5-dev \
+        libssl-dev \
+        flex \
+        bison \
+        libselinux1 \
+        gnupg \
+        wget \
+        diffstat \
+        chrpath \
+        socat \
+        x11-utils \
+        dbus-x11 \
+        libdbus-glib-1-2 \
+        xterm \
+        autoconf \
+        libtool \
+        tar \
+        unzip \
+        texinfo \
+        zlib1g-dev \
+        g++-multilib \
+        gcc-multilib \
+        build-essential \
+        libc6-dev-i386 \
+        screen \
+        pax \
+        gzip \
+        bzip2 \
+        python2.7-dev \
+        python2.7 \
+        python3-dev \
+        python3 \
+        pip \
+        procps \
+        apt-utils \
+        binutils \
+        cpio \
+        expect \
+        file \
+        libfreetype6 \
+        fontconfig \
+        fonts-noto-cjk \
+        ttf-wqy-zenhei \
+        git \
+        gosu \
+        lib32z1-dev \
+        libcanberra-gtk-module \
+        libcanberra-gtk3-module \
+        libglib2.0-dev \
+        libgtk2.0-0 \
+        libjpeg62-dev \
+        libsdl1.2-dev \
+        libstdc++6 \
+        libtext-csv-perl \
+        libtool-bin \
+        libxi6 \
+        libxrender1 \
+        libxtst6 \
+        locales \
+        lsb-core \
+        lsb-release \
+        ncurses-dev \
+        ocl-icd-libopencl1 \
+        ocl-icd-opencl-dev \
+        opencl-headers \
+        pkg-config \
+        software-properties-common \
+        sudo \
+        u-boot-tools \
+        vim \
+        xvfb \
+        parted \
+        udev \
+        graphviz && \
     apt-get clean && \
-    locale-gen en_US.UTF-8
+    apt-get autoclean && \
+    rm -rf /tmp/* && \
+    rm -rf /var/tmp/* && \
+    rm -rf /var/cache/* && \
+    rm -rf /var/lib/apt/lists/*
 
+##
+## locale settings
+##
+ENV TERM=xterm
+RUN locale-gen en_US.UTF-8 && \
+    update-locale
+ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
+
+##
+## PYNQ/Jupyter settings
+##
 RUN pip install jupyter pynq
-
-RUN apt-get update && \
-    apt-get install -y libxrender1 libxtst6 libxi6 libfreetype6 fontconfig git vim wget net-tools bzip2 procps apt-utils ttf-wqy-zenhei && \
-    apt-get clean
-
-ENV DISPLAY=:1 \
-    TERM=xterm \
-    VNC_PORT=5901 \
-    DEBIAN_FRONTEND=noninteractive \
-    NO_VNC_PORT=6901 \
-    NO_VNC_HOME=/noVNC \
-    VNC_COL_DEPTH=24 \
-    VNC_RESOLUTION=1600x900 \
-    VNC_VIEW_ONLY=false
-
-RUN apt-get update && \
-    apt-get install -y xfce4 xfce4-terminal xterm dbus-x11 libdbus-glib-1-2 python-numpy tigervnc-standalone-server && \
-    apt-get purge -y pm-utils *screensaver* && \
-    apt-get clean
-
-RUN mkdir -p $NO_VNC_HOME/utils/websockify && \
-    wget -qO- https://github.com/novnc/noVNC/archive/refs/tags/v1.3.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME && \
-    wget -qO- https://github.com/novnc/websockify/archive/refs/tags/v0.10.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify && \
-    ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html && \
-    mkdir $HOME/.vnc
-
-EXPOSE 8888 6901
-
-COPY ./entrypoint.sh /entrypoint.sh
-
+EXPOSE 8888
 COPY ./jupyter_configs/ /root/.jupyter
+COPY ./jupyter_configs/ /etc/skel/.jupyter
 
-RUN mkdir $HOME/Desktop && \
-echo "[Desktop Entry]\nEncoding=UTF-8\nType=Application\nName=Vitis HLS ${XILINX_VERSION}\nComment=Vitis HLS ${XILINX_VERSION}\nIcon=/tools/Xilinx/Vitis_HLS/${XILINX_VERSION}/doc/images/vitis_hls_icon.png\nExec=/tools/Xilinx/Vitis_HLS/${XILINX_VERSION}/bin/vitis_hls" > $HOME/Desktop/"Vitis HLS ${XILINX_VERSION}.desktop" && \
-echo "[Desktop Entry]\nEncoding=UTF-8\nType=Application\nName=Xilinx Vitis ${XILINX_VERSION}\nComment=Xilinx Vitis ${XILINX_VERSION}\nIcon=/tools/Xilinx/Vitis/${XILINX_VERSION}/doc/images/ide_icon.png\nExec=/tools/Xilinx/Vitis/${XILINX_VERSION}/bin/vitis" > $HOME/Desktop/"Xilinx Vitis ${XILINX_VERSION}.desktop" && \
-echo "[Desktop Entry]\nEncoding=UTF-8\nType=Application\nName=Vivado ${XILINX_VERSION}\nComment=Vivado ${XILINX_VERSION}\nIcon=/tools/Xilinx/Vivado/${XILINX_VERSION}/doc/images/vivado_logo.png\nExec=/tools/Xilinx/Vivado/${XILINX_VERSION}/bin/vivado" > $HOME/Desktop/"Vivado ${XILINX_VERSION}.desktop" && \
-echo "[Desktop Entry]\nEncoding=UTF-8\nType=Application\nName=Model Composer and System Generator ${XILINX_VERSION}\nComment=Model Composer and System Generator ${XILINX_VERSION}\nIcon=/tools/Xilinx/Model_Composer/${XILINX_VERSION}/data/images/Compiler.png\nExec=/tools/Xilinx/Model_Composer/${XILINX_VERSION}/bin/model_composer" > $HOME/Desktop/"Model Composer and System Generator ${XILINX_VERSION}.desktop" && \
-chmod 755 $HOME/Desktop/*.desktop
+##
+## Xilinx Vitis settings
+##
+COPY init_vitis.sh /usr/local/bin/init_vitis.sh
+RUN chmod +x /usr/local/bin/init_vitis.sh && \
+    echo '. /usr/local/bin/init_vitis.sh' >> /root/.bashrc && \
+    echo '. /opt/xilinx/xrt/setup.sh' >> /root/.bashrc && \
+    echo '. /usr/local/bin/init_vitis.sh' >> /etc/skel/.bashrc && \
+    echo '. /opt/xilinx/xrt/setup.sh' >> /etc/skel/.bashrc
 
-RUN printf '\n$localhost = "no";\n1;\n' >> /etc/tigervnc/vncserver-config-defaults && \
-    printf '\n#!/bin/bash\nxset -dpms &\nxset s noblank &\nxset s off &\nstartxfce4 --replace &' >> $HOME/.vnc/xstartup
+##
+## ENTRYPOINT settings
+##
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
-RUN apt-get update && \
-    apt-get install -y libc6-dev-i386 graphviz xvfb && \
-    apt-get clean
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
-RUN echo "export PATH=$PATH:/usr/local/MATLAB/R2022b/bin" >> $HOME/.bashrc && \
-    echo "source /tools/Xilinx/Vitis/${XILINX_VERSION}/settings64.sh" >> $HOME/.bashrc && \
-    echo "source /opt/xilinx/auto_setup.sh" >> $HOME/.bashrc
-
-WORKDIR /data
-
-ENTRYPOINT [ "/entrypoint.sh" ]
-CMD [ "" ]
+CMD ["/bin/bash", "-l"]
