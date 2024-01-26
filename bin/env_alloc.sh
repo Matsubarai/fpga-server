@@ -1,47 +1,33 @@
 #!/bin/bash
+XILINX_VERSION="2022.2"
 EXC="true"
 PUB="false"
-VNC_ENABLE="false"
-JUPYTER_ENABLE="false"
-IMG="xilinx-u280:latest"
-while getopts ":d:p:i:v:eh" optname
+REPO="ghcr.io/matsubarai/Vitis-Docker"
+IMG="${REPO}/vitis:${XILINX_VERSION}"
+while getopts ":d:i:v:m:psh" optname
 do
 	case "$optname" in
 		"d")
 			DEVICE=$OPTARG
 			;;
-		"e")
+		"s")
 			EXC="false"
 			;;
-                "p")
-			if [ $EXPOSE_PORT ]
-			then
-				echo "only one APP can be exposed"
-				exit 1
-   			fi
-                        PUB="true"
-			APP=$OPTARG
-			if [ $APP = "jupyter" ]
-			then
-				EXPOSE_PORT=8888
-				JUPYTER_ENABLE="true"
-			elif [ $APP = "vnc" ]
-			then
-				EXPOSE_PORT=6901
-				VNC_ENABLE="true"
-			else
-				echo "Unknown APP $APP"
-				exit 1
-			fi
+		"p")
+			PUB="true"
+			EXPOSE_PORT=8888
 			;;
 		"i")
-			IMG="$OPTARG"
+			IMG="$REPO/$OPTARG"
 			;;
 		"v")
-			MNT="$MNT -v $OPTARG" 
+			XILINX_VERSION=$OPTARG
+			;;
+		"m")
+			MNT="$MNT --volume $OPTARG" 
 			;;
 		"h")
-			echo "USAGE: env_alloc [-d <DeviceID[,...]=NULL>] [-e (NO_EXCLUSION_FLAG)] [-p <APP=jupyter|vnc>] [-i <IMAGE_NAME>]"
+			echo "USAGE: env_alloc [-d <DeviceID[,...]=NULL>] [-s (NO_EXCLUSION_FLAG)] [-p (JUPYTER_ENABLE_FLAG)] [-v <Toolchain=2022.2>] [-i <Image=vitis:base>]"
 			exit 0
 			;;
 		":")
@@ -62,9 +48,10 @@ if [ $MNT ]
 then
 	echo "custom mount point:$MNT"
 fi
-FLAGS="--label owner=$USER --name $USER-env --runtime=xilinx -v /usr/local/MATLAB:/usr/local/MATLAB -v /home/$USER:/data -v /usr/local/etc:/usr/local/etc -v /tools:/tools:ro -e XILINX_VISIBLE_DEVICES=$DEVICE -e XILINX_DEVICE_EXCLUSIVE=$EXC -e VNC_ENABLE=$VNC_ENABLE -e JUPYTER_ENABLE=$JUPYTER_ENABLE -e USER=$USER $MNT"
+DISPLAY_ID=`echo $DISPLAY | cut -d: -f2 | cut -d. -f1`
+CONTAINER_DISPLAY="$USER-env/`xauth list | grep :$DISPLAY_ID | cut -d'/' -f2`"
+FLAGS="--detach --network host --name $USER-env --hostname $USER-env --workdir /data --runtime=xilinx --env XILINX_VISIBLE_DEVICES=$DEVICE --env XILINX_DEVICE_EXCLUSIVE=$EXC --env XILINX_VERSION=${XILINX_VERSION} --env XILINXD_LICENSE_FILE=/tools/Xilinx --env TZ=Asia/Shanghai --env DISPLAY=$DISPLAY --env QT_X11_NO_MITSHM=1 --env NO_AT_BRIDGE=1 --env LIBGL_ALWAYS_INDIRECT=1 --env HOST_USER=${USER} --env HOST_UID=$(id -u ${USER}) --env HOST_GROUP=${USER} --env HOST_GID=$(id -g ${USER}) --volume /tmp/.X11-unix:/tmp/.X11-unix:rw --volume /usr/local/MATLAB:/usr/local/MATLAB --volume /tools/Xilinx:/tools/Xilinx --volume /home/$USER:/data --volume /usr/local/etc:/usr/local/etc $MNT"
 
-docker inspect $USER-env > /dev/null 2>&1
 if [ $? -eq 0 ]
 then
 	echo "Environment exists. You can execute or deallocate it."
@@ -81,17 +68,16 @@ then
 
 	if [ $PORT ]
 	then
-		echo "Publish $APP port $EXPOSE_PORT/tcp -> localhost:$PORT"
-		docker run -d -p $PORT:$EXPOSE_PORT -e PORT=$PORT $FLAGS $IMG
+		echo "Publish jupyter port -> http://localhost:$PORT"
+		docker run -p $PORT:$EXPOSE_PORT --env PORT=$PORT $FLAGS $IMG sleep infinity
 	else
 		echo "No valid port for publishing, use a random port"
-		docker run -d -P $FLAGS $IMG
+		docker run -P $FLAGS $IMG sleep infinity
 	fi
 else
 	echo "In command-line mode"
-	docker run -d $FLAGS $IMG init
+	docker run $FLAGS $IMG sleep infinity
 fi
-
 if [ $? -ne 0 ]
 then
 	if [ $PORT ]
@@ -100,11 +86,11 @@ then
 	fi
 	exit 1
 fi
-
 if [ $DEVICE ]
 then
 	at -f /usr/local/bin/env_dealloc now +2 hours 2>&1 | grep -o '[0-9]\+' | head -1 > /usr/local/etc/timer_id.$USER
-	echo "Allocated devices $DEVICE will be released after 2 hours."
+	echo "Device[$DEVICE] will be released after 2 hours."
 fi
 
-docker exec -it $USER-env /bin/bash
+docker exec -it -u $UID $USER-env xauth add $CONTAINER_DISPLAY
+docker exec -it -u $UID $USER-env /bin/bash
