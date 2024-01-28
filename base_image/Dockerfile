@@ -23,6 +23,7 @@ RUN apt-get update && \
         libselinux1 \
         gnupg \
         wget \
+        htop \
         diffstat \
         chrpath \
         socat \
