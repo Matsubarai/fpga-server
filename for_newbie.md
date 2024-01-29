@@ -28,7 +28,7 @@ env_alloc
 ```
 ### Step 2.2: 写不惯 OpenCL 语法的主机端程序，我要用 [PYNQ](http://www.pynq.io/) ，我要用 [Jupyter](https://jupyter.org/) 交互界面！
 ```bash
-env_alloc -p jupyter
+env_alloc -p
 ```
 你可以点击命令行输出的链接访问 JupyterLab 服务。
 ### Step 2.3: 我要看波形，我要看综合报告，我要用图形化界面！
@@ -60,7 +60,7 @@ env_alloc -d <ID> [OTHER OPTION]
 
 你需要先执行 `exit` 返回管理节点，之后执行 `env_dealloc` 指令释放环境。
 ## Step 4: 自定义环境
-默认环境提供了 **Vitis 2022.2 & XRT 3.16** 开发环境，且已经提供了相关软件包依赖。你也可以临时安装其他软件包。但是，所有临时安装都会随着环境释放而消失。
+默认环境版本为 **Vitis 2022.2 & XRT 3.16.204** ，且已经提供了相关软件包依赖。你也可以临时安装其他软件包。但是，所有临时安装都会随着环境释放而消失。
 
 如果你需要长期使用自定义的环境，可以修改**构建脚本[模板](./Dockerfile.template)**，编写你所需软件包的安装流程并置于仓库根目录，通过 Pull requests 提交到该仓库。**构建脚本命名格式为：`Dockerfile.<IMAGE NAME>`**。
 
@@ -68,6 +68,6 @@ env_alloc -d <ID> [OTHER OPTION]
 ```bash
 env_alloc -i <IMAGE NAME> [OTHER OPTION]
 ```
-此外，通过 `env_alloc -v <2019.1|2019.2|2020.2|2021.2|2022.2|2023.2>` 选项，可以控制开发环境的工具链版本。
+此外，通过 `env_alloc -v <2019.2|2020.2|2021.2|2022.2|2023.2>` 选项，可以控制开发环境的工具链版本。
 
 **Note: 未测试，可能会导致问题**
