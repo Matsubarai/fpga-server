@@ -43,6 +43,7 @@ RUN apt-get update && \
         libc6-dev-i386 \
         screen \
         pax \
+        zip \
         gzip \
         bzip2 \
         python2.7-dev \
@@ -119,10 +120,8 @@ COPY ./jupyter_configs/ /etc/skel/.jupyter
 ##
 COPY init_vitis.sh /usr/local/bin/init_vitis.sh
 RUN chmod +x /usr/local/bin/init_vitis.sh && \
-    echo '. /usr/local/bin/init_vitis.sh' >> /root/.bashrc && \
-    echo '. /opt/xilinx/xrt/setup.sh' >> /root/.bashrc && \
-    echo '. /usr/local/bin/init_vitis.sh' >> /etc/skel/.bashrc && \
-    echo '. /opt/xilinx/xrt/setup.sh' >> /etc/skel/.bashrc
+    echo 'if [ -z "$SSH_TTY" -a -f /usr/local/bin/init_vitis.sh ]; then . /usr/local/bin/init_vitis.sh; fi' >> /root/.bashrc && \
+    echo 'if [ -z "$SSH_TTY" -a -f /usr/local/bin/init_vitis.sh ]; then . /usr/local/bin/init_vitis.sh; fi' >> /etc/skel/.bashrc
 
 ##
 ## ENTRYPOINT settings
