@@ -1,4 +1,4 @@
-# Guide for Lab502 Server with Xilinx Cards v0.4
+# Guide for Lab502 Server with Xilinx Cards
 
 [English](./README.md) | Chinese
 
