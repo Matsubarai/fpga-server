@@ -6,16 +6,15 @@ CONTAINER_GID=${HOST_GID:-1000}
 echo "Starting with USER: ${CONTAINER_USER}, UID: ${CONTAINER_UID}, GROUP: ${CONTAINER_GROUP}, GID: ${CONTAINER_GID}"
 
 cleanup () {
-	kill -s SIGTERM $PID_SUB
 	kill -s SIGTERM $!
+	kill -s SIGTERM $PID_SUB
 	if [ $PORT ];
 	then
 		echo $PORT >> /usr/local/etc/port_pool
 	fi
-	rm /home/${CONTAINER_USER}/.Xauthority /home/${CONTAINER_USER}/.bashrc /home/${CONTAINER_USER}/.profile /home/${CONTAINER_USER}/.bash_logout
-	rm -rf /home/${CONTAINER_USER}/.jupyter
-	rm -rf /data/.snapshot
-	mv /home/${CONTAINER_USER} /data/.snapshot
+	/usr/sbin/gosu "${CONTAINER_USER}" rm -rf /home/${CONTAINER_USER}/.jupyter
+	/usr/sbin/gosu "${CONTAINER_USER}" mv /home/${CONTAINER_USER}/.env_bak/.bashrc /home/${CONTAINER_USER}/.env_bak/.bash_logout /home/${CONTAINER_USER}/.env_bak/.profile /home/${CONTAINER_USER}
+	/usr/sbin/gosu "${CONTAINER_USER}" rm -rf /home/${CONTAINER_USER}/.env_bak
 	exit 0
 }
 
@@ -23,9 +22,9 @@ trap cleanup SIGINT SIGTERM
 
 if [ $PORT ]; then
 	echo "c.NotebookApp.port=$PORT" >> /root/.jupyter/jupyter_notebook_config.py
- 	echo "c.NotebookApp.port=$PORT" >> /etc/skel/.jupyter/jupyter_notebook_config.py
+	echo "c.NotebookApp.port=$PORT" >> /etc/skel/.jupyter/jupyter_notebook_config.py
 	echo "c.ServerApp.port=$PORT" >> /root/.jupyter/jupyter_lab_config.py
- 	echo "c.ServerApp.port=$PORT" >> /etc/skel/.jupyter/jupyter_lab_config.py
+	echo "c.ServerApp.port=$PORT" >> /etc/skel/.jupyter/jupyter_lab_config.py
 fi
 
 getent passwd ${CONTAINER_USER} 2>&1 > /dev/null
@@ -57,22 +56,25 @@ fi
 
 chown ${CONTAINER_USER} $(tty)
 
-mv /data/.snapshot/* /home/${CONTAINER_USER}
-
 /usr/sbin/gosu "${CONTAINER_USER}" jupyter lab 2>&1 &
 PID_SUB=$!
 
+/usr/sbin/gosu "${CONTAINER_USER}" mkdir /home/${CONTAINER_USER}/.env_bak 
+/usr/sbin/gosu "${CONTAINER_USER}" mv /home/${CONTAINER_USER}/.bashrc /home/${CONTAINER_USER}/.bash_logout /home/${CONTAINER_USER}/.profile /home/${CONTAINER_USER}/.env_bak 
+/usr/sbin/gosu "${CONTAINER_USER}" cp /etc/skel/.bashrc /etc/skel/.bash_logout /etc/skel/.profile /home/${CONTAINER_USER}
+/usr/sbin/gosu "${CONTAINER_USER}" mkdir /home/${CONTAINER_USER}/.jupyter 
+/usr/sbin/gosu "${CONTAINER_USER}" cp /etc/skel/.jupyter/jupyter_notebook_config.py /etc/skel/.jupyter/jupyter_lab_config.py /home/${CONTAINER_USER}/.jupyter 
+
 /usr/sbin/gosu "${CONTAINER_USER}" "$@" &
 
-wait $PID_SUB
 wait $!
+wait $PID_SUB
 
 if [ $PORT ];
 then
 	echo $PORT >> /usr/local/etc/port_pool
 fi
 
-rm /home/${CONTAINER_USER}/.Xauthority /home/${CONTAINER_USER}/.bashrc /home/${CONTAINER_USER}/.profile /home/${CONTAINER_USER}/.bash_logout
-rm -rf /home/${CONTAINER_USER}/.jupyter
-rm -rf /data/.snapshot
-mv /home/${CONTAINER_USER} /data/.snapshot
+/usr/sbin/gosu "${CONTAINER_USER}" rm -rf /home/${CONTAINER_USER}/.jupyter
+/usr/sbin/gosu "${CONTAINER_USER}" mv /home/${CONTAINER_USER}/.env_bak/.bashrc /home/${CONTAINER_USER}/.env_bak/.bash_logout /home/${CONTAINER_USER}/.env_bak/.profile /home/${CONTAINER_USER}
+/usr/sbin/gosu "${CONTAINER_USER}" rm -rf /home/${CONTAINER_USER}/.env_bak
