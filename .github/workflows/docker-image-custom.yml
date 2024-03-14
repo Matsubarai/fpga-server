@@ -31,13 +31,13 @@ jobs:
       - name: setup
         id: setup
         run: |
-          for file in $(find . -type f -name "Dockerfile.*")
+          for file in $(find . -type f -name "custom/Dockerfile.*")
           do
             if [ ${custom_envs} ]
             then
-              custom_envs="${custom_envs},\"${file:13}\""
+              custom_envs="${custom_envs},\"${file:20}\""
             else
-              custom_envs="[\"${file:13}\""
+              custom_envs="[\"${file:20}\""
             fi
           done
           custom_envs="${custom_envs}]"
@@ -70,7 +70,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@f2a1d5e99d037542a71f64918e516c093c6f3fc4
         with:
-          file: Dockerfile.${{ matrix.custom_envs }}
+          file: custom/Dockerfile.${{ matrix.custom_envs }}
           push: true
           tags: ${{ steps.meta_custom.outputs.tags }}
           labels: ${{ steps.meta_custom.outputs.labels }}
