@@ -31,7 +31,7 @@ jobs:
       - name: setup
         id: setup
         run: |
-          for file in $(find . -type f -name "custom/Dockerfile.*")
+          for file in $(find . -type f -wholename "./custom/Dockerfile.*")
           do
             if [ ${custom_envs} ]
             then
