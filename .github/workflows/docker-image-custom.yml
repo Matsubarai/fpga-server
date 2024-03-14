@@ -9,11 +9,11 @@ on:
   push:
     branches: [ "main" ]
     paths: 
-      - "Dockerfile.**"
+      - "custom/Dockerfile.**"
   pull_request:
     branches: [ "main" ]
     paths: 
-      - "Dockerfile.**"
+      - "custom/Dockerfile.**"
 
 env:
   REGISTRY: ghcr.io
