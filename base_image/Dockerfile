@@ -110,7 +110,8 @@ ENV LANG=en_US.UTF-8 LANGUAGE=en_US:en LC_ALL=en_US.UTF-8
 ##
 ## PYNQ/Jupyter settings
 ##
-RUN pip install jupyter pynq
+RUN /bin/bash -c 'source /opt/xilinx/xrt/setup.sh && \
+     pip install jupyter pynq matplotlib -i https://pypi.tuna.tsinghua.edu.cn/simple'
 EXPOSE 8888
 COPY ./jupyter_configs/ /root/.jupyter
 COPY ./jupyter_configs/ /etc/skel/.jupyter
@@ -118,10 +119,10 @@ COPY ./jupyter_configs/ /etc/skel/.jupyter
 ##
 ## Xilinx Vitis settings
 ##
-COPY init_vitis.sh /usr/local/bin/init_vitis.sh
+COPY files/init_vitis.sh /usr/local/bin/init_vitis.sh
 RUN chmod +x /usr/local/bin/init_vitis.sh && \
-    echo 'if [ -z "$SSH_TTY" -a -f /usr/local/bin/init_vitis.sh ]; then . /usr/local/bin/init_vitis.sh; fi' >> /root/.bashrc && \
-    echo 'if [ -z "$SSH_TTY" -a -f /usr/local/bin/init_vitis.sh ]; then . /usr/local/bin/init_vitis.sh; fi' >> /etc/skel/.bashrc
+    echo 'if [  -f /usr/local/bin/init_vitis.sh ]; then . /usr/local/bin/init_vitis.sh; export USER=`id -u -n`; fi' >> /root/.bashrc && \
+    echo 'if [  -f /usr/local/bin/init_vitis.sh ]; then . /usr/local/bin/init_vitis.sh; export USER=`id -u -n`; fi' >> /etc/skel/.bashrc
 
 ##
 ## ENTRYPOINT settings
