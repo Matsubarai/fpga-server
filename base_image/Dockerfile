@@ -119,7 +119,7 @@ COPY ./jupyter_configs/ /etc/skel/.jupyter
 ##
 ## Xilinx Vitis settings
 ##
-COPY files/init_vitis.sh /usr/local/bin/init_vitis.sh
+COPY init_vitis.sh /usr/local/bin/init_vitis.sh
 RUN chmod +x /usr/local/bin/init_vitis.sh && \
     echo 'if [  -f /usr/local/bin/init_vitis.sh ]; then . /usr/local/bin/init_vitis.sh; export USER=`id -u -n`; fi' >> /root/.bashrc && \
     echo 'if [  -f /usr/local/bin/init_vitis.sh ]; then . /usr/local/bin/init_vitis.sh; export USER=`id -u -n`; fi' >> /etc/skel/.bashrc
